@@ -4,6 +4,8 @@ const router  =express.Router();
 
 router.post('/',BookController.saveBookInDatabase);
 router.get('/', BookController.getBooks);
+router.get('/book/:id', BookController.getBookById);
+router.put('/update-book/:id', BookController.updateBookById)
 
 
 module.exports =router;

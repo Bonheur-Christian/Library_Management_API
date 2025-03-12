@@ -8,7 +8,7 @@ const BookModel = {
         try {
             const [similarBook] = await connection.execute("SELECT * FROM books WHERE isbn = ?", [isbn]);
             console.log(similarBook);
-            
+
 
             if (similarBook.length > 0)
                 console.log("Books already exists.");
@@ -16,7 +16,7 @@ const BookModel = {
             const [result] = await connection.execute(query, [title, author, isbn, price, published_year]);
 
             console.log(result);
-            
+
 
             return result;
 
@@ -31,10 +31,8 @@ const BookModel = {
         const query = "SELECT * FROM books";
         try {
 
-            const [results] =await connection.execute(query)
+            const [results] = await connection.execute(query)
             console.log(results);
-            console.log(typeof(results));            
-            
             return results;
 
         } catch (err) {
@@ -42,9 +40,39 @@ const BookModel = {
             throw err;
 
         }
+    },
+
+    getBookById: async (id) => {
+        const query = "SELECT * FROM books WHERE id  =?";
+        try {
+
+            const [result] = await connection.execute(query, [id]);
+            console.log(result);
+
+            return result;
+
+        } catch (err) {
+            console.log(err);
+            throw err;
+
+        }
+    }, 
+
+    updateBook: async(title, author, isbn, price, published_year, id)=>{
+        const query ="UPDATE books SET title =?, author =?, isbn =?, price =?, published_year =? WHERE id =?";
+        try{
+
+            const [results] =await connection.execute(query,[title, author, isbn, price, published_year, id] )
+            return results;
+
+        }catch(err){
+            console.log(err);
+            throw err;
+            
+        }
     }
 
 
 }
 
-module.exports =BookModel;
+module.exports = BookModel;

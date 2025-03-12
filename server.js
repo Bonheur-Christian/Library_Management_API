@@ -3,14 +3,16 @@ const express = require('express');
 const BookRoute = require("./routes/BookRoute")
 const app = express();
 
-const PORT =process.env.PORT;
+const PORT = process.env.PORT;
 
 
 
 app.use(express.json());
 
 app.use("/save-book", BookRoute);
-app.use("/", BookRoute)
+app.use("/", BookRoute);
+app.use("/book/:id", BookRoute);
+app.use("/update-book/:id", BookRoute);
 
 
 
