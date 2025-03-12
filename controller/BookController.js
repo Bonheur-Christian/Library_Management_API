@@ -52,6 +52,7 @@ module.exports = {
             const bookToUpdate = await BookModel.getBook(id);
           
             if (bookToUpdate.length > 0) {
+                
                 const updatedBook = await BookModel.updateBook(title, author, isbn, price, published_year, id);
 
                 if (updatedBook.affectedRows > 0)
