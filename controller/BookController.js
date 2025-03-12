@@ -30,7 +30,7 @@ module.exports = {
 
         try {
 
-            const book = await BookModel.getBookById(id);
+            const book = await BookModel.getBook(id);
             if (!book)
                 res.status(404).json({ message: "Book not Found." })
 
@@ -49,18 +49,24 @@ module.exports = {
         const { id } = req.params;
 
         try {
-            const bookToUpdate = await BookModel.getBookById(id);
-            console.log(bookToUpdate);
-            
-            if (!bookToUpdate)
-                return res.status(404).json("Book Not Found");
+            const bookToUpdate = await BookModel.getBook(id);
+          
+            if (bookToUpdate.length > 0) {
+                const updatedBook = await BookModel.updateBook(title, author, isbn, price, published_year, id);
 
-            const updatedBook = await BookModel.updateBook(title, author, isbn, price, published_year, id);
+                if (updatedBook.affectedRows > 0)
+                    return res.status(200).json({ message: "Book Updated Successfully", book: updatedBook })
 
-            if (updatedBook)
-                return res.status(200).json({ message: "Book updated successfully" , book:book});
+                return res.status(400).json({ message: "No changes made to the book." });
+
+            }
+
+            return res.status(404).json("Book Not Found");
+
+
+
         } catch (err) {
-            return res.status(500).json({ messageError: "Error in getting the book to update.", error:err })
+            return res.status(500).json({ messageError: "Error in updating book.", error: err })
         }
     }
 }

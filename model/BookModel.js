@@ -42,12 +42,11 @@ const BookModel = {
         }
     },
 
-    getBookById: async (id) => {
+    getBook: async (id) => {
         const query = "SELECT * FROM books WHERE id  =?";
         try {
 
             const [result] = await connection.execute(query, [id]);
-            console.log(result);
 
             return result;
 
