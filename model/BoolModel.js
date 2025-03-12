@@ -11,11 +11,12 @@ const BookModel = {
             
 
             if (similarBook.length > 0)
-                throw new Error("Books already exists.")
-
-
+                console.log("Books already exists.");
 
             const [result] = await connection.execute(query, [title, author, isbn, price, published_year]);
+
+            console.log(result);
+            
 
             return result;
 
@@ -30,8 +31,9 @@ const BookModel = {
         const query = "SELECT * FROM books";
         try {
 
-            const [results] =(await connection).execute(query)
+            const [results] =await connection.execute(query)
             console.log(results);
+            console.log(typeof(results));            
             
             return results;
 

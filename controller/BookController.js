@@ -13,6 +13,15 @@ module.exports={
             res.status(500).json({error:err.message});
         }
         
+    }, 
+
+    getBooks:async(req, res)=>{
+        try{
+            const books =await BookModel.getAllBooks();
+            res.json(books);
+        }catch(err){
+            res.status(500).json({message:"Error occured in getting all books."})
+        }
     }
 }
 
