@@ -30,9 +30,9 @@ const BookModel = {
     getAllBooks: async () => {
         const query = "SELECT * FROM books";
         try {
-
+            console.log("hy");
+            
             const [results] = await connection.execute(query)
-            console.log(results);
             return results;
 
         } catch (err) {
@@ -69,6 +69,23 @@ const BookModel = {
             throw err;
             
         }
+    }, 
+
+    deleteBook: async(id)=>{
+        const query ="DELETE FROM books WHERE id = ?";
+
+        try{
+
+            const [results] =await connection.execute(query, [id]);
+
+            return results;
+
+        }catch(err){
+            console.log(err);
+            throw err;
+                        
+        }
+
     }
 
 

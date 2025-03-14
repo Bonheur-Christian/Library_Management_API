@@ -9,10 +9,13 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 
-app.use("/save-book", BookRoute);
-app.use("/", BookRoute);
-app.use("/book/:id", BookRoute);
-app.use("/update-book/:id", BookRoute);
+app.use("/api/books", BookRoute);
+
+// app.use("/save-book", BookRoute);
+// app.use("/all", BookRoute);
+// app.use("/book/:id", BookRoute);
+// app.use("/update-book/:id", BookRoute);
+// app.use("/delete-book/:id", BookRoute);
 
 
 
