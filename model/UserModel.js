@@ -27,7 +27,80 @@ const UserModel = {
 
     },
 
-    // getUser: async(id)
+    getAllUsers: async () => {
+        const query = "SELECT * FROM users";
+
+        try {
+
+            const [results] = await connection.execute(query);
+
+            return results;
+
+        } catch (err) {
+            console.log(err);
+            throw err;
+
+        }
+
+    },
+
+    getUser: async (id) => {
+        const query = "SELECT username , email FROM users WHERE userID =?";
+        try {
+
+            const [results] = await connection.execute(query, [id]);
+
+            return results;
+
+        } catch (err) {
+            console.log(err);
+            throw err;
+
+        }
+    },
+
+
+    updateUser: async (username, email, id) => {
+
+        const query = "UPDATE users SET username =?, email =? WHERE userID =?";
+        try {
+
+            const [existingUser] = await connection.execute("SELECT * FROM users WHERE email = ?", [email]);
+
+            if (existingUser.length > 0) {
+                return { error: "Email already used!" }
+            }
+
+
+            const [results] = await connection.execute(query, [username, email, id])
+
+            return results;
+
+
+        } catch (err) {
+            console.log(err);
+            throw err;
+
+        }
+    },
+
+    deleteUser: async (id) => {
+        const query = "DELETE FROM users WHERE userID = ?";
+
+        try {
+
+            const [results] = await connection.execute(query, [id]);
+
+            return results;
+
+        } catch (err) {
+            console.log(err);
+            throw err;
+
+        }
+    }
+
+
 
 }
 

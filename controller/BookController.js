@@ -24,6 +24,7 @@ module.exports = {
             console.log("hey");
 
             const books = await BookModel.getAllBooks();
+            
             if (books.length > 0) {
                 return res.status(200).json({ message: "Books retrieved", Books: books });
             }
