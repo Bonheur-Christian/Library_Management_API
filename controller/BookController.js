@@ -6,7 +6,7 @@ module.exports = {
 
         try {
             const book = await BookModel.insertBook(title, author, isbn, price, published_year);
-            return res.status(201).json({ message: "Book successfully added.", book });
+            return res.status(201).json({ message: "Book successfully added.", book:book });
             
         } catch (err) {
             console.log(err);

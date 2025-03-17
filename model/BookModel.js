@@ -9,14 +9,10 @@ const BookModel = {
             const [similarBook] = await connection.execute("SELECT * FROM books WHERE isbn = ?", [isbn]);
             console.log(similarBook);
 
-
             if (similarBook.length > 0)
                 console.log("Books already exists.");
 
             const [result] = await connection.execute(query, [title, author, isbn, price, published_year]);
-
-            console.log(result);
-
 
             return result;
 
