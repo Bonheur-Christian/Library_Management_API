@@ -5,15 +5,15 @@ const UserModel = {
 
     saveUser: async (username, email, password) => {
 
-        const query = "INSERT INTO users VALUES (?, ?, ?)";
+        const query = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
 
         try {
 
             const [existingUser] = await connection.execute("SELECT * FROM users WHERE email = ?", [email]);
-            console.log(existingUser);
 
-            if (existingUser.length > 0)
-                console.log("User Already Exist");
+            if (existingUser.length > 0) {
+                return { error: "Email already used!" }
+            }
 
             const [results] = await connection.execute(query, [username, email, password]);
 
@@ -33,4 +33,4 @@ const UserModel = {
 }
 
 
-module.exports =UserModel;
+module.exports = UserModel;
