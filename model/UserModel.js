@@ -1,5 +1,4 @@
 const connection = require("./config");
-require('dotenv').config();
 
 const UserModel = {
 

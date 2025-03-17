@@ -7,12 +7,9 @@ const BookModel = {
         const query = "INSERT INTO books(title, author , isbn, price , published_year) VALUE(?,?,?,?,?)";
         try {
             const [similarBook] = await connection.execute("SELECT * FROM books WHERE isbn = ?", [isbn]);
-            console.log(similarBook);
-
-            if (similarBook.length > 0){
-                console.log("Books already exists.");
-
-                return;
+            
+            if (similarBook.length > 0) {
+                return { error: "Book ISBN already exists" };
 
             }
 
@@ -31,7 +28,7 @@ const BookModel = {
         const query = "SELECT * FROM books";
         try {
             console.log("hy");
-            
+
             const [results] = await connection.execute(query)
             return results;
 
@@ -55,35 +52,35 @@ const BookModel = {
             throw err;
 
         }
-    }, 
+    },
 
-    updateBook: async(title, author, isbn, price, published_year, id)=>{
-        const query ="UPDATE books SET title =?, author =?, isbn =?, price =?, published_year =? WHERE id =?";
-        try{
+    updateBook: async (title, author, isbn, price, published_year, id) => {
+        const query = "UPDATE books SET title =?, author =?, isbn =?, price =?, published_year =? WHERE id =?";
+        try {
 
-            const [results] =await connection.execute(query,[title, author, isbn, price, published_year, id] )
+            const [results] = await connection.execute(query, [title, author, isbn, price, published_year, id])
             return results;
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
             throw err;
-            
+
         }
-    }, 
+    },
 
-    deleteBook: async(id)=>{
-        const query ="DELETE FROM books WHERE id = ?";
+    deleteBook: async (id) => {
+        const query = "DELETE FROM books WHERE id = ?";
 
-        try{
+        try {
 
-            const [results] =await connection.execute(query, [id]);
+            const [results] = await connection.execute(query, [id]);
 
             return results;
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
             throw err;
-                        
+
         }
 
     }

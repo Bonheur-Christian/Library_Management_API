@@ -6,8 +6,12 @@ module.exports = {
 
         try {
             const book = await BookModel.insertBook(title, author, isbn, price, published_year);
-            return res.status(201).json({ message: "Book successfully added.", book:book });
-            
+
+            if (book.error) {
+                return res.status(400).json({ messageError: book.error })
+            }
+            return res.status(201).json({ message: "Book successfully added.", book: book });
+
         } catch (err) {
             console.log(err);
             return res.status(500).json({ error: err.message });
@@ -18,13 +22,13 @@ module.exports = {
     getBooks: async (req, res) => {
         try {
             console.log("hey");
-            
+
             const books = await BookModel.getAllBooks();
             if (books.length > 0) {
-                 return res.status(200).json({ message: "Books retrieved", Books: books });
+                return res.status(200).json({ message: "Books retrieved", Books: books });
             }
 
-            return res.status(404).json({messageError:"No Books Found"})
+            return res.status(404).json({ messageError: "No Books Found" })
 
         } catch (err) {
             return res.status(500).json({ message: "Error occured in getting all books." })

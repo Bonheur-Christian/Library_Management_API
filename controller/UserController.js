@@ -1,7 +1,8 @@
 const UserModel = require('../model/UserModel');
 const bcrypt = require('bcrypt')
+require('dotenv').config();
 
-const saltRound = 7;
+const saltRound =parseInt(process.env.SALT_ROUND, 10)
 
 module.exports = {
 
@@ -15,15 +16,13 @@ module.exports = {
 
 
             const hashedPassword = await bcrypt.hash(password, saltRound);
-            console.log(hashedPassword);
-
 
             const user = await UserModel.saveUser(username, email, hashedPassword);
 
             if (user.error) {
                 return res.status(400).json({ messageError: user.error })
             }
-            
+
             return res.status(200).json({ message: "User saved In database", user: user });
 
         } catch (err) {
