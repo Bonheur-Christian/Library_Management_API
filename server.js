@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const BookRoute = require("./routes/BookRoute")
 const UserRoute = require('./routes/UserRoute')
-const LoginRoute =require('./routes/LoginRoute')
 const app = express();
 
 const PORT = process.env.PORT;
@@ -18,7 +17,6 @@ app.use(session({
 
 app.use("/api/books", BookRoute);
 app.use("/api/user", UserRoute);
-app.use("/api/user",LoginRoute)
 
 
 const port = 3001;
