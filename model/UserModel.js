@@ -59,6 +59,24 @@ const UserModel = {
         }
     },
 
+    getuserByEmail: async (email) => {
+        const retrieveQuery = "SELECT * FROM users WHERE email = ?";
+
+        try {
+
+            const [userByEmail] = await connection.execute(retrieveQuery, [email]);            
+
+            return (userByEmail.length > 0 )? userByEmail[0] : null
+
+
+
+        } catch (err) {
+            console.log(err);
+            throw err;
+
+        }
+    },
+
 
     updateUser: async (username, email, id) => {
 
@@ -89,14 +107,14 @@ const UserModel = {
 
         try {
 
-            const checkQuery ="SELECT * FROM users WHERE userID = ?"
+            const checkQuery = "SELECT * FROM users WHERE userID = ?"
 
             const [user] = await connection.execute(checkQuery, [id]);
             if (user.length === 0) {
                 throw new Error("User not found");
             }
-                        
-            const [results] = await connection.execute(deleteQuery, [id]);            
+
+            const [results] = await connection.execute(deleteQuery, [id]);
 
             return results;
 
