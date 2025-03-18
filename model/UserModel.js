@@ -85,11 +85,18 @@ const UserModel = {
     },
 
     deleteUser: async (id) => {
-        const query = "DELETE FROM users WHERE userID = ?";
+        const deleteQuery = "DELETE FROM users WHERE userID = ?";
 
         try {
 
-            const [results] = await connection.execute(query, [id]);
+            const checkQuery ="SELECT * FROM users WHERE userID = ?"
+
+            const [user] = await connection.execute(checkQuery, [id]);
+            if (user.length === 0) {
+                throw new Error("User not found");
+            }
+                        
+            const [results] = await connection.execute(deleteQuery, [id]);            
 
             return results;
 

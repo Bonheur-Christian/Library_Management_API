@@ -104,14 +104,15 @@ module.exports = {
         try {
 
             const deletedUser = await UserModel.deleteUser(id);
+            
 
-            if (deletedUser.length > 0)
-                return res.status(200).json({ message: "USer deleted." })
+            if (deletedUser.affectedRows > 0)
+                return res.status(200).json({ message: "User deleted." })
 
             return res.statu(400).json({ messageError: "No user deleted" })
 
         } catch (err) {
-            return res.status(500).json({ messageError: "Error in deleting user" });
+            return res.status(500).json({ messageError: "Error in deleting user" , error:err});
         }
     }
 }
