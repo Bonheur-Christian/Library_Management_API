@@ -7,7 +7,7 @@ const BookModel = {
         const query = "INSERT INTO books(title, author , isbn, price , published_year) VALUE(?,?,?,?,?)";
         try {
             const [similarBook] = await connection.execute("SELECT * FROM books WHERE isbn = ?", [isbn]);
-            
+
             if (similarBook.length > 0) {
                 return { error: "Book ISBN already exists" };
 
@@ -83,6 +83,21 @@ const BookModel = {
 
         }
 
+    },
+
+    //functions to handle Book Lending
+
+    findBookToLend: async (title, author) => {
+        const findBookQuery = "SELECT title, author , price , published_year FROM books WHERE title =? AND author =? ";
+
+        try {
+            const [results] = await connection.execute(findBookQuery, [title, author]);
+            return results;
+
+        } catch (err) {
+            
+            throw err;
+        }
     }
 
 

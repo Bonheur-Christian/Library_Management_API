@@ -105,6 +105,26 @@ module.exports = {
         } catch (err) {
             return res.status(500).json({ messageError: "Failed to Delete Book." })
         }
+    }, 
+
+    lendBook:async(req, res)=>{
+        const {title, author} =req.body;
+
+        try{
+            if(!title || !author)
+                res.status(404).json({messageError:"Missing Required Fields"});
+            
+            const desiredBook =await BookModel.findBookToLend(title, author);
+
+            if(desiredBook.length ===0)
+                return res.status(404).json({messageError:"Desired book(s) Not Found."});
+
+            res.status(200).json({message:"Books Requested are: ", books:desiredBook});
+
+        }catch(err){
+            return res.status(500).json({messageError:"Error in Borrowing Book"});
+        }
+
     }
 }
 
