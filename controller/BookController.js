@@ -2,10 +2,10 @@ const BookModel = require("../model/BookModel")
 
 module.exports = {
     saveBookInDatabase: async (req, res) => {
-        const { title, author, isbn, price, published_year } = req.body;
+        const {title, author, isbn, price, published_year, quantity} = req.body;
 
         try {
-            const book = await BookModel.insertBook(title, author, isbn, price, published_year);
+            const book = await BookModel.insertBook(title, author, isbn, price, published_year, quantity);
 
             if (book.error) {
                 return res.status(400).json({ messageError: book.error })
@@ -21,7 +21,6 @@ module.exports = {
 
     getBooks: async (req, res) => {
         try {
-            console.log("hey");
 
             const books = await BookModel.getAllBooks();
             
@@ -113,7 +112,7 @@ module.exports = {
         try{
             if(!title || !author)
                 res.status(404).json({messageError:"Missing Required Fields"});
-            
+
             const desiredBook =await BookModel.findBookToLend(title, author);
 
             if(desiredBook.length ===0)

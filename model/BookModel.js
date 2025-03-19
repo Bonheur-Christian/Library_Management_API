@@ -3,44 +3,41 @@ require("dotenv").config();
 
 const BookModel = {
 
-    insertBook: async (title, author, isbn, price, published_year) => {
-        const query = "INSERT INTO books(title, author , isbn, price , published_year) VALUE(?,?,?,?,?)";
+    insertBook: async (title, author, isbn, price, published_year, quantity) => {
+        const query = "INSERT INTO library_stock(bookName, book_author , bookISBN, price , published_year, quantity) VALUE(?,?,?,?,?,?)";
         try {
-            const [similarBook] = await connection.execute("SELECT * FROM books WHERE isbn = ?", [isbn]);
+            const [similarBook] = await connection.execute("SELECT * FROM library_stock WHERE bookISBN = ?", [isbn]);
 
             if (similarBook.length > 0) {
                 return { error: "Book ISBN already exists" };
 
             }
 
-            const [result] = await connection.execute(query, [title, author, isbn, price, published_year]);
+            const [result] = await connection.execute(query, [title, author, isbn, price, published_year, quantity]);
 
             return result;
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
     },
 
-    getAllBooks: async () => {
-        const query = "SELECT * FROM books";
+    getAllBooksInStock: async () => {
+        const query = "SELECT * FROM library_stock";
         try {
-            console.log("hy");
 
             const [results] = await connection.execute(query)
             return results;
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
     },
 
-    getBook: async (id) => {
-        const query = "SELECT * FROM books WHERE id  =?";
+    getBookFromStock: async (id) => {
+        const query = "SELECT * FROM library_stock WHERE bookID  =?";
         try {
 
             const [result] = await connection.execute(query, [id]);
@@ -48,37 +45,34 @@ const BookModel = {
             return result;
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
     },
 
-    updateBook: async (title, author, isbn, price, published_year, id) => {
-        const query = "UPDATE books SET title =?, author =?, isbn =?, price =?, published_year =? WHERE id =?";
+    updateBookInStock: async (title, author, isbn, price, published_year, quantity, id) => {
+        const updateQuery = "UPDATE books SET bookName =?, book_author =?, bookISBN =?, price =?, published_year =? , quantity =? WHERE bookID =?";
         try {
 
-            const [results] = await connection.execute(query, [title, author, isbn, price, published_year, id])
+            const [results] = await connection.execute(updateQuery, [title, author, isbn, price, published_year, quantity, id])
             return results;
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
     },
 
-    deleteBook: async (id) => {
-        const query = "DELETE FROM books WHERE id = ?";
+    deleteBookFromStock: async (id) => {
+        const deleteQuery = "DELETE FROM library_stock WHERE bookID = ?";
 
         try {
 
-            const [results] = await connection.execute(query, [id]);
+            const [results] = await connection.execute(deleteQuery, [id]);
 
             return results;
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
@@ -95,7 +89,7 @@ const BookModel = {
             return results;
 
         } catch (err) {
-            
+
             throw err;
         }
     }
