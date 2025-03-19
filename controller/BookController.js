@@ -1,7 +1,7 @@
 const BookModel = require("../model/BookModel")
 
 module.exports = {
-    saveBookInDatabase: async (req, res) => {
+    saveBookInStock: async (req, res) => {
         const {title, author, isbn, price, published_year, quantity} = req.body;
 
         try {

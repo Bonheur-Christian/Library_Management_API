@@ -2,7 +2,7 @@ const express = require('express');
 const BookController = require('../controller/BookController');
 const router  =express.Router();
 
-router.post('/save-book',BookController.saveBookInDatabase);
+router.post('/save-book',BookController.saveBookInStock);
 router.post('/request-book', BookController.lendBook);
 router.get('/all-books', BookController.getBooks);
 router.get('/book/:id', BookController.getBookById);
