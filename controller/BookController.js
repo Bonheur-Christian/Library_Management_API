@@ -5,7 +5,7 @@ module.exports = {
         const { title, author, isbn, price, published_year, quantity } = req.body;
 
         try {
-            const book = await BookModel.insertBook(title, author, isbn, price, published_year, quantity);
+            const book = await BookModel.insertBookInStock(title, author, isbn, price, published_year, quantity);
 
             if (book.error) {
                 return res.status(400).json({ messageError: book.error })
@@ -105,8 +105,8 @@ module.exports = {
 
 
         } catch (err) {
-            return res.status(500).json({ messageError: "Failed to Delete Book.", err:err })
-            
+            return res.status(500).json({ messageError: "Failed to Delete Book.", err: err })
+
         }
     },
 
@@ -115,17 +115,42 @@ module.exports = {
 
         try {
             if (!title || !author)
-                res.status(404).json({ messageError: "Missing Required Fields" });
+                return res.status(404).json({ messageError: "Missing Required Fields" });
 
             const desiredBook = await BookModel.findBookToLend(title, author);
 
             if (desiredBook.length === 0)
                 return res.status(404).json({ messageError: "Desired book(s) Not Found." });
 
-            res.status(200).json({ message: "Books Requested are: ", books: desiredBook });
+
+
+            const bookToLend = desiredBook[0];
+            const availableQuantity = bookToLend.quantity;
+
+
+            if (availableQuantity <= 0)
+                return res.status(404).json({ messageError: "No Copies left to lend" })
+
+
+            const updatedQuantity = availableQuantity - 1;
+
+            await BookModel.updateBookInStock(
+                bookToLend.bookName,
+                bookToLend.book_author,
+                bookToLend.bookISBN,
+                bookToLend.price,
+                bookToLend.published_year,
+                updatedQuantity,
+                bookToLend.bookID
+            );
+
+            await BookModel.insertBook()
+            const book = await BookModel.insertBook(title, author, isbn, price, published_year, quantity);
+
+            return res.status(200).json({ message: "Books lent successfully ", books: desiredBook });
 
         } catch (err) {
-            return res.status(500).json({ messageError: "Error in Borrowing Book" });
+            return res.status(500).json({ messageError: "Error in lending  Book" });
         }
 
     }

@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const BookModel = {
 
-    insertBook: async (title, author, isbn, price, published_year, quantity) => {
+    insertBookInStock: async (title, author, isbn, price, published_year, quantity) => {
         const query = "INSERT INTO library_stock(bookName, book_author , bookISBN, price , published_year, quantity) VALUE(?,?,?,?,?,?)";
         try {
             const [similarBook] = await connection.execute("SELECT * FROM library_stock WHERE bookISBN = ?", [isbn]);
@@ -21,6 +21,9 @@ const BookModel = {
             throw err;
 
         }
+    },
+
+    insertBookInLendedBooks: async () => {
     },
 
     getAllBooksInStock: async () => {
@@ -58,6 +61,8 @@ const BookModel = {
             return results;
 
         } catch (err) {
+            console.log(err);
+
             throw err;
 
         }
@@ -69,11 +74,11 @@ const BookModel = {
         try {
 
             const [results] = await connection.execute(deleteQuery, [id]);
-            
+
             return results;
 
         } catch (err) {
-            throw err;            
+            throw err;
 
         }
 
@@ -82,14 +87,14 @@ const BookModel = {
     //functions to handle Book Lending
 
     findBookToLend: async (title, author) => {
-        const findBookQuery = "SELECT title, author , price , published_year FROM books WHERE title =? AND author =? ";
+        const findBookQuery = "SELECT * FROM library_stock WHERE bookName =? AND book_author =? ";
 
         try {
             const [results] = await connection.execute(findBookQuery, [title, author]);
+
             return results;
 
         } catch (err) {
-
             throw err;
         }
     }
