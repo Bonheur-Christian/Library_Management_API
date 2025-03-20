@@ -2,7 +2,7 @@ const BookModel = require("../model/BookModel")
 
 module.exports = {
     saveBookInStock: async (req, res) => {
-        const {title, author, isbn, price, published_year, quantity} = req.body;
+        const { title, author, isbn, price, published_year, quantity } = req.body;
 
         try {
             const book = await BookModel.insertBook(title, author, isbn, price, published_year, quantity);
@@ -10,6 +10,7 @@ module.exports = {
             if (book.error) {
                 return res.status(400).json({ messageError: book.error })
             }
+
             return res.status(201).json({ message: "Book successfully added.", book: book });
 
         } catch (err) {
@@ -23,9 +24,9 @@ module.exports = {
         try {
 
             const books = await BookModel.getAllBooksInStock();
-            
+
             if (books.length > 0) {
-                return res.status(200).json({ message: "Books retrieved", Books: books });
+                return res.status(200).json({ message: "Books retrieved: ", Books: books });
             }
 
             return res.status(404).json({ messageError: "No Books Found" })
@@ -79,7 +80,7 @@ module.exports = {
 
         } catch (err) {
             console.log(err);
-            
+
             return res.status(500).json({ messageError: "Error in updating book.", error: err })
         }
     },
@@ -89,10 +90,10 @@ module.exports = {
 
         try {
 
-            const bookToDelete = await BookModel.getBook(id);
+            const bookToDelete = await BookModel.getBookFromStock(id);
 
             if (bookToDelete.length > 0) {
-                const deletedBook = await BookModel.deleteBook(id);
+                const deletedBook = await BookModel.deleteBookFromStock(id);
 
                 if (deletedBook.affectedRows > 0)
                     return res.status(200).json({ message: "Book Deleted Successfully", deletedBook: bookToDelete })
@@ -104,26 +105,27 @@ module.exports = {
 
 
         } catch (err) {
-            return res.status(500).json({ messageError: "Failed to Delete Book." })
+            return res.status(500).json({ messageError: "Failed to Delete Book.", err:err })
+            
         }
-    }, 
+    },
 
-    lendBook:async(req, res)=>{
-        const {title, author} =req.body;
+    lendBook: async (req, res) => {
+        const { title, author } = req.body;
 
-        try{
-            if(!title || !author)
-                res.status(404).json({messageError:"Missing Required Fields"});
+        try {
+            if (!title || !author)
+                res.status(404).json({ messageError: "Missing Required Fields" });
 
-            const desiredBook =await BookModel.findBookToLend(title, author);
+            const desiredBook = await BookModel.findBookToLend(title, author);
 
-            if(desiredBook.length ===0)
-                return res.status(404).json({messageError:"Desired book(s) Not Found."});
+            if (desiredBook.length === 0)
+                return res.status(404).json({ messageError: "Desired book(s) Not Found." });
 
-            res.status(200).json({message:"Books Requested are: ", books:desiredBook});
+            res.status(200).json({ message: "Books Requested are: ", books: desiredBook });
 
-        }catch(err){
-            return res.status(500).json({messageError:"Error in Borrowing Book"});
+        } catch (err) {
+            return res.status(500).json({ messageError: "Error in Borrowing Book" });
         }
 
     }

@@ -69,11 +69,11 @@ const BookModel = {
         try {
 
             const [results] = await connection.execute(deleteQuery, [id]);
-
+            
             return results;
 
         } catch (err) {
-            throw err;
+            throw err;            
 
         }
 
