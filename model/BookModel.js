@@ -51,7 +51,7 @@ const BookModel = {
     },
 
     updateBookInStock: async (title, author, isbn, price, published_year, quantity, id) => {
-        const updateQuery = "UPDATE books SET bookName =?, book_author =?, bookISBN =?, price =?, published_year =? , quantity =? WHERE bookID =?";
+        const updateQuery = "UPDATE library_stock SET bookName =?, book_author =?, bookISBN =?, price =?, published_year =? , quantity =? WHERE bookID =?";
         try {
 
             const [results] = await connection.execute(updateQuery, [title, author, isbn, price, published_year, quantity, id])

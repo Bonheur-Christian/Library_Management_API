@@ -19,10 +19,10 @@ module.exports = {
 
     },
 
-    getBooks: async (req, res) => {
+    getBooksInStock: async (req, res) => {
         try {
 
-            const books = await BookModel.getAllBooks();
+            const books = await BookModel.getAllBooksInStock();
             
             if (books.length > 0) {
                 return res.status(200).json({ message: "Books retrieved", Books: books });
@@ -35,13 +35,13 @@ module.exports = {
         }
     },
 
-    getBookById: async (req, res) => {
+    getBookByIdFromStock: async (req, res) => {
         const { id } = req.params;
         console.log(id);
 
         try {
 
-            const book = await BookModel.getBook(id);
+            const book = await BookModel.getBookFromStock(id);
             if (!book)
                 return res.status(404).json({ message: "Book not Found." })
 
@@ -55,16 +55,16 @@ module.exports = {
         }
     },
 
-    updateBookById: async (req, res) => {
-        const { title, author, isbn, price, published_year } = req.body;
+    updateBookByIdInStock: async (req, res) => {
+        const { title, author, isbn, price, published_year, quantity } = req.body;
         const { id } = req.params;
 
         try {
-            const bookToUpdate = await BookModel.getBook(id);
+            const bookToUpdate = await BookModel.getBookFromStock(id);
 
             if (bookToUpdate.length > 0) {
 
-                const updatedBook = await BookModel.updateBook(title, author, isbn, price, published_year, id);
+                const updatedBook = await BookModel.updateBookInStock(title, author, isbn, price, published_year, quantity, id);
 
                 if (updatedBook.affectedRows > 0)
                     return res.status(200).json({ message: "Book Updated Successfully", book: updatedBook })
@@ -78,6 +78,8 @@ module.exports = {
 
 
         } catch (err) {
+            console.log(err);
+            
             return res.status(500).json({ messageError: "Error in updating book.", error: err })
         }
     },
