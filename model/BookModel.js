@@ -23,7 +23,19 @@ const BookModel = {
         }
     },
 
-    insertBookInLendedBooks: async () => {
+    insertBookInLendedBooks: async (book_id, borrower_name,lend_date) => {
+        const insertQuery ="INSERT INTO lended_books(book_id, borrower_name, lend_date) VALUES (?, ?, ?)";
+        try{            
+
+            const [results] =await connection.execute(insertQuery, [book_id, borrower_name, lend_date]);
+
+            return results;
+
+        }catch(err){
+            console.log(err);
+            
+            throw err;
+        }
     },
 
     getAllBooksInStock: async () => {

@@ -111,7 +111,7 @@ module.exports = {
     },
 
     lendBook: async (req, res) => {
-        const { title, author } = req.body;
+        const { borrower_name, title, author } = req.body;
 
         try {
             if (!title || !author)
@@ -122,15 +122,11 @@ module.exports = {
             if (desiredBook.length === 0)
                 return res.status(404).json({ messageError: "Desired book(s) Not Found." });
 
-
-
             const bookToLend = desiredBook[0];
             const availableQuantity = bookToLend.quantity;
 
-
             if (availableQuantity <= 0)
-                return res.status(404).json({ messageError: "No Copies left to lend" })
-
+                return res.status(404).json({ messageError: "No Copies left to lend" });
 
             const updatedQuantity = availableQuantity - 1;
 
@@ -144,10 +140,29 @@ module.exports = {
                 bookToLend.bookID
             );
 
-            await BookModel.insertBook()
-            const book = await BookModel.insertBook(title, author, isbn, price, published_year, quantity);
+            const date = new Date();
 
-            return res.status(200).json({ message: "Books lent successfully ", books: desiredBook });
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+
+            const lend_date = `${year}-${month}-${day}`;
+
+            const lendedBook = await BookModel.insertBookInLendedBooks(bookToLend.bookID, borrower_name, lend_date);
+
+            if (lendedBook.affectedRows > 0)
+                return res.status(200).json(
+                    {
+                        message: "Book Lent Successfully",
+                        book: {
+                            title: bookToLend.bookName,
+                            author: bookToLend.book_author,
+                            borrower: borrower_name,
+                            lend_date: lend_date
+                        }
+
+                    }
+                )
 
         } catch (err) {
             return res.status(500).json({ messageError: "Error in lending  Book" });
