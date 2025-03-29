@@ -36,7 +36,7 @@ module.exports = {
     getAllUsersFromDB: async (req, res) => {
 
         try {
-            const users = await UserModel.getAllUsers();
+            const users = await UserModel.getAllUsers();            
 
             if (users.length > 0)
                 return res.status(200).json({ message: "Users retrived successfully", users: users })
@@ -55,6 +55,8 @@ module.exports = {
         try {
 
             const user = await UserModel.getUser(id);
+            console.log(user);
+            
 
             if (user.length > 0)
                 return res.status(200).json({ message: "User retrieved successfully.", user: user })
@@ -64,6 +66,8 @@ module.exports = {
 
 
         } catch (err) {
+            console.log(err);
+            
             return res.status(500).json({ messageError: "Error in getting user." })
         }
     },

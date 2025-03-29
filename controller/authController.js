@@ -30,7 +30,6 @@ module.exports = {
 
 
         } catch (err) {
-            console.log(err);
 
             return res.status(500).json({ messageError: "Error in user login", Error: err });
         }

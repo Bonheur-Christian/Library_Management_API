@@ -54,7 +54,7 @@ const BookModel = {
     getBookFromStock: async (id) => {
         const query = "SELECT * FROM library_stock WHERE bookID  =?";
         try {
-
+            
             const [result] = await connection.execute(query, [id]);
 
             return result;

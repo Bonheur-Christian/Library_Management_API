@@ -21,8 +21,6 @@ const UserModel = {
         } catch (err) {
             if (err) throw err;
 
-            console.log(err);
-
         }
 
     },
@@ -31,13 +29,12 @@ const UserModel = {
         const query = "SELECT * FROM users";
 
         try {
-
+            
             const [results] = await connection.execute(query);
 
             return results;
 
-        } catch (err) {
-            console.log(err);
+        } catch (err) {            
             throw err;
 
         }
@@ -53,7 +50,7 @@ const UserModel = {
             return results;
 
         } catch (err) {
-            console.log(err);
+            
             throw err;
 
         }
@@ -71,7 +68,6 @@ const UserModel = {
 
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
@@ -83,20 +79,11 @@ const UserModel = {
         const query = "UPDATE users SET username =?, email =? WHERE userID =?";
         try {
 
-            const [existingUser] = await connection.execute("SELECT * FROM users WHERE email = ?", [email]);
-
-            if (existingUser.length > 0) {
-                return { error: "Email already used!" }
-            }
-
-
             const [results] = await connection.execute(query, [username, email, id])
 
             return results;
 
-
         } catch (err) {
-            console.log(err);
             throw err;
 
         }
@@ -119,7 +106,6 @@ const UserModel = {
             return results;
 
         } catch (err) {
-            console.log(err);
             throw err;
 
         }

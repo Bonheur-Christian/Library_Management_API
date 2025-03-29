@@ -38,19 +38,17 @@ module.exports = {
 
     getBookByIdFromStock: async (req, res) => {
         const { id } = req.params;
-        console.log(id);
 
         try {
 
             const book = await BookModel.getBookFromStock(id);
-            if (!book)
+            if (book.length ===0)
                 return res.status(404).json({ message: "Book not Found." })
 
             return res.json(book);
 
 
         } catch (err) {
-            console.log(err);
             return res.status(500).json({ message: "Errot occured in getting Book with specified id." })
 
         }
