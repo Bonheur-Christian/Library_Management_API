@@ -1,7 +1,7 @@
 export default function Signin() {
   return (
     <div className="flex">
-      <div className="w-[40%] bg-blue-500 h-screen">
+      <div className="w-[40%] bg-indigo-900 h-screen">
         <h1 className="text-4xl font-medium text-white text-center w-[80%] pt-[25rem] mx-auto leading-relaxed">
           Welcome Back To Library Management System!
         </h1>
@@ -24,7 +24,7 @@ export default function Signin() {
             className="outline-2 outline-gray-200 bg-gray-100 py-4 px-6 rounded-lg text-gray-700"
           />
 
-          <button className="text-white text-xl bg-blue-500 hover:bg-blue-800  duration-500 font-medium w-1/2 justify-center mx-auto py-6 rounded-xl ">
+          <button className="text-white text-xl bg-indigo-900 hover:bg-blue-800  duration-500 font-medium w-1/2 justify-center mx-auto py-6 rounded-xl ">
             Login
           </button>
         </div>
