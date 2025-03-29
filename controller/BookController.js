@@ -42,7 +42,7 @@ module.exports = {
         try {
 
             const book = await BookModel.getBookFromStock(id);
-            if (book.length ===0)
+            if (book.length === 0)
                 return res.status(404).json({ message: "Book not Found." })
 
             return res.json(book);
@@ -112,7 +112,7 @@ module.exports = {
         const { borrower_name, title, author } = req.body;
 
         try {
-            if (!title || !author)
+            if (!borrower_name || !title || !author)
                 return res.status(404).json({ messageError: "Missing Required Fields" });
 
             const desiredBook = await BookModel.findBookToLend(title, author);

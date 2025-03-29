@@ -23,17 +23,17 @@ const BookModel = {
         }
     },
 
-    insertBookInLendedBooks: async (book_id, borrower_name,lend_date) => {
-        const insertQuery ="INSERT INTO lended_books(book_id, borrower_name, lend_date) VALUES (?, ?, ?)";
-        try{            
+    insertBookInLendedBooks: async (book_id, borrower_name, lend_date) => {
+        const insertQuery = "INSERT INTO lended_books(book_id, borrower_name, lend_date) VALUES (?, ?, ?)";
+        try {
 
-            const [results] =await connection.execute(insertQuery, [book_id, borrower_name, lend_date]);
+            const [results] = await connection.execute(insertQuery, [book_id, borrower_name, lend_date]);
 
             return results;
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
-            
+
             throw err;
         }
     },
@@ -54,7 +54,7 @@ const BookModel = {
     getBookFromStock: async (id) => {
         const query = "SELECT * FROM library_stock WHERE bookID  =?";
         try {
-            
+
             const [result] = await connection.execute(query, [id]);
 
             return result;
@@ -109,8 +109,9 @@ const BookModel = {
         } catch (err) {
             throw err;
         }
-    }
+    },
 
+   
 
 }
 
