@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require('cors');
 const express = require('express');
 const session = require('express-session');
 const NovelRoute = require("./routes/NovelRoute");
@@ -15,6 +16,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: false }
 }))
+app.use(cors());
 
 app.use("/api/books", NovelRoute);
 app.use("/api/user", UserRoute);

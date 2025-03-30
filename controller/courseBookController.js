@@ -24,7 +24,7 @@ module.exports = {
             const books = await CourseBooksModel.getAllCourseBooks();
 
             if (books.length > 0) {
-                return res.status(200).json({ message: "Books retrieved: ", Books: books });
+                return res.status(200).json({ Books: books });
             }
 
             return res.status(404).json({ messageError: "No Books Found" })
