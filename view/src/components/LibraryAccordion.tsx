@@ -43,7 +43,7 @@ const LibraryAccordion = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                className="flex items-center space-x-3 text-gray-700 hover:bg-gray-200 px-3 py-2 hover:border-l-4 border-indigo-900 cursor-pointer"
+                className="flex items-center space-x-3 text-gray-700 hover:bg-gray-200  px-3 py-2 hover:border-l-4 border-indigo-900 cursor-pointer"
               >
                 {item.icon}
                 <span>{item.link}</span>

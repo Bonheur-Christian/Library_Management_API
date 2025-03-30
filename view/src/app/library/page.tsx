@@ -6,7 +6,9 @@ import { GiAtom } from "react-icons/gi";
 import { FaArchive } from "react-icons/fa";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { FaLanguage } from "react-icons/fa6";
+import { SiStudyverse } from "react-icons/si";
 import LibraryAccordion from "@/components/LibraryAccordion";
+import Image from "next/image";
 
 export default function Library() {
   const ordinaryLevel = [
@@ -23,20 +25,22 @@ export default function Library() {
 
   const advancedLevel = [
     { icon: <BiMath />, link: "Mathematics" },
-    { icon: <IoMagnetOutline />, link: "Physics" },
-    { icon: <FaMicroscope />, link: "Biology" },
+    { icon: <IoMagnetOutline />, link: "Computer Science" },
+    { icon: <GiTakeMyMoney />, link: "Economics" },
     { icon: <FaEarthAfrica />, link: "Geography" },
-    { icon: <GiAtom />, link: "Chemistry" },
-    { icon: <FaArchive />, link: "History" },
     { icon: <GiTakeMyMoney />, link: "E-Ship" },
     { icon: <FaLanguage />, link: "Ikinyarwanda" },
     { icon: <FaLanguage />, link: "English" },
+    { icon: <SiStudyverse />, link: "GSCS" },
+
   ];
 
   return (
     <div className="flex">
-      <div className="w-[20%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
-        <h1 className="text-4xl font-medim text-white ">Library</h1>
+      <div className="w-[25%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
+        <div className="w-full bg-indigo-900 sticky top-0 z-50 py-6">
+          <Image src="svg/library.svg" height={200} width={200}  alt="Library"/>
+        </div>
         <p className="text-2xl text-white">All Books</p>
 
         <LibraryAccordion
