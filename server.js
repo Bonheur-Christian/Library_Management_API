@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require('express');
 const session = require('express-session');
-const BookRoute = require("./routes/BookRoute")
+const NovelRoute = require("./routes/NovelRoute")
 const UserRoute = require('./routes/UserRoute')
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(session({
     cookie: { secure: false }
 }))
 
-app.use("/api/books", BookRoute);
+app.use("/api/books", NovelRoute);
 app.use("/api/user", UserRoute);
 
 

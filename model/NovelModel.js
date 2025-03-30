@@ -1,7 +1,7 @@
 const connection = require("./config");
 require("dotenv").config();
 
-const BookModel = {
+const NovelModel = {
 
     insertBookInStock: async (title, author, isbn, price, published_year, quantity) => {
         const query = "INSERT INTO library_stock(bookName, book_author , bookISBN, price , published_year, quantity) VALUE(?,?,?,?,?,?)";
@@ -115,4 +115,4 @@ const BookModel = {
 
 }
 
-module.exports = BookModel;
+module.exports = NovelModel;

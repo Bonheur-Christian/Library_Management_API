@@ -1,11 +1,11 @@
-const BookModel = require("../model/BookModel")
+const NovelModel = require("../model/NovelModel")
 
 module.exports = {
     saveBookInStock: async (req, res) => {
         const { title, author, isbn, price, published_year, quantity } = req.body;
 
         try {
-            const book = await BookModel.insertBookInStock(title, author, isbn, price, published_year, quantity);
+            const book = await NovelModel.insertBookInStock(title, author, isbn, price, published_year, quantity);
 
             if (book.error) {
                 return res.status(400).json({ messageError: book.error })
@@ -23,7 +23,7 @@ module.exports = {
     getBooksInStock: async (req, res) => {
         try {
 
-            const books = await BookModel.getAllBooksInStock();
+            const books = await NovelModel.getAllBooksInStock();
 
             if (books.length > 0) {
                 return res.status(200).json({ message: "Books retrieved: ", Books: books });
@@ -41,7 +41,7 @@ module.exports = {
 
         try {
 
-            const book = await BookModel.getBookFromStock(id);
+            const book = await NovelModel.getBookFromStock(id);
             if (book.length === 0)
                 return res.status(404).json({ message: "Book not Found." })
 
@@ -59,11 +59,11 @@ module.exports = {
         const { id } = req.params;
 
         try {
-            const bookToUpdate = await BookModel.getBookFromStock(id);
+            const bookToUpdate = await NovelModel.getBookFromStock(id);
 
             if (bookToUpdate.length > 0) {
 
-                const updatedBook = await BookModel.updateBookInStock(title, author, isbn, price, published_year, quantity, id);
+                const updatedBook = await NovelModel.updateBookInStock(title, author, isbn, price, published_year, quantity, id);
 
                 if (updatedBook.affectedRows > 0)
                     return res.status(200).json({ message: "Book Updated Successfully", book: updatedBook })
@@ -88,10 +88,10 @@ module.exports = {
 
         try {
 
-            const bookToDelete = await BookModel.getBookFromStock(id);
+            const bookToDelete = await NovelModel.getBookFromStock(id);
 
             if (bookToDelete.length > 0) {
-                const deletedBook = await BookModel.deleteBookFromStock(id);
+                const deletedBook = await NovelModel.deleteBookFromStock(id);
 
                 if (deletedBook.affectedRows > 0)
                     return res.status(200).json({ message: "Book Deleted Successfully", deletedBook: bookToDelete })
@@ -115,7 +115,7 @@ module.exports = {
             if (!borrower_name || !title || !author)
                 return res.status(404).json({ messageError: "Missing Required Fields" });
 
-            const desiredBook = await BookModel.findBookToLend(title, author);
+            const desiredBook = await NovelModel.findBookToLend(title, author);
 
             if (desiredBook.length === 0)
                 return res.status(404).json({ messageError: "Desired book(s) Not Found." });
@@ -128,7 +128,7 @@ module.exports = {
 
             const updatedQuantity = availableQuantity - 1;
 
-            await BookModel.updateBookInStock(
+            await NovelModel.updateBookInStock(
                 bookToLend.bookName,
                 bookToLend.book_author,
                 bookToLend.bookISBN,
@@ -146,7 +146,7 @@ module.exports = {
 
             const lend_date = `${year}-${month}-${day}`;
 
-            const lendedBook = await BookModel.insertBookInLendedBooks(bookToLend.bookID, borrower_name, lend_date);
+            const lendedBook = await NovelModel.insertBookInLendedBooks(bookToLend.bookID, borrower_name, lend_date);
 
             if (lendedBook.affectedRows > 0)
                 return res.status(200).json(
