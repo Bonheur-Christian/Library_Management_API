@@ -9,7 +9,7 @@ const NovelModel = {
             const [similarBook] = await connection.execute("SELECT * FROM library_stock WHERE bookISBN = ?", [isbn]);
 
             if (similarBook.length > 0) {
-                return { error: "Book ISBN already exists" };
+                return { error: "Book already exists" };
 
             }
 
