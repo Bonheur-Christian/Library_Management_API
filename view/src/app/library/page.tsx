@@ -81,10 +81,11 @@ export default function Library() {
           initiallyOpen={true}
         />
         <LibraryAccordion
-          title="Ordinary Level "
+          title="Advanced Level "
           items={advancedLevel}
           initiallyOpen={false}
         />
+        <a href="/library/lent" className="font-semibold text-white">Books Lent</a>
       </div>
 
       <div className="w-[80%] py-6 px-12 space-y-10">
