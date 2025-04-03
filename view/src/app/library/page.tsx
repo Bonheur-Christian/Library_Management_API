@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa6";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import SideBar from "@/components/SideBar";
+import Modal from "@/components/Modal";
 
 export default function Library() {
   type Book = {
@@ -18,6 +19,7 @@ export default function Library() {
 
   const [courseBooks, setCourseBooks] = useState<Book[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>("year");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourseBooks = async () => {
@@ -43,11 +45,11 @@ export default function Library() {
   });
 
   const displayedBooks = selectedYear === "year" ? courseBooks : filterBooks;
-  
+
   return (
     <div className="flex">
       <div className="w-[25%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
-        <SideBar logoUrl="/svg/library.svg"/>
+        <SideBar logoUrl="/svg/library.svg" />
       </div>
 
       <div className="w-[80%] py-6 px-12 space-y-10">
@@ -69,7 +71,7 @@ export default function Library() {
             <select
               name="year"
               id="year"
-              className="outline-none border-2 border-indigo-900 rounded-lg px-4 py-2"
+              className="outline-none border-2 border-indigo-900 rounded-lg px-6 py-2 cursor-pointer"
               onChange={(e) => setSelectedYear(e.target.value)}
             >
               <option value="year">Select Year</option>
@@ -84,8 +86,16 @@ export default function Library() {
               size={25}
               title="Add Book"
               className="text-indigo-900 font-light cursor-pointer"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
             />
           </div>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Add a New Book"
+          />
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
@@ -116,43 +126,46 @@ export default function Library() {
               </tr>
             </thead>
             <tbody>
-
               {displayedBooks.length > 0 ? (
-              displayedBooks.map((book, index) => (
-                <tr key={index} className="text-center hover:bg-gray-100 ">
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2 ">
-                    {book.book_id}
-                  </td>
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2">
-                    {book.bookname}
-                  </td>
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2">
-                    {book.subject}
-                  </td>
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2">
-                    {book.academic_year}
-                  </td>
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2">
-                    {book.isbn}
-                  </td>
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2">
-                    {book.published_year}
-                  </td>
-                  <td className="border border-indigo-900 text-gray-600 px-4 py-2">
-                    {book.quantity}
-                  </td>
-                  <td className="border border-indigo-900 px-4 py-2 space-x-4 text-white">
-                    <button className="bg-red-500 hover:bg-red-700 font-medium rounded-xl py-2 px-6">
-                      Delete
-                    </button>
-                    <button className="bg-green-500 hover:bg-green-700 font-medium rounded-xl py-2 px-6">
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))):(
+                displayedBooks.map((book, index) => (
+                  <tr key={index} className="text-center hover:bg-gray-100 ">
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2 ">
+                      {book.book_id}
+                    </td>
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
+                      {book.bookname}
+                    </td>
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
+                      {book.subject}
+                    </td>
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
+                      {book.academic_year}
+                    </td>
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
+                      {book.isbn}
+                    </td>
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
+                      {book.published_year}
+                    </td>
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
+                      {book.quantity}
+                    </td>
+                    <td className="border border-indigo-900 px-4 py-2 space-x-4 text-white">
+                      <button className="bg-red-500 hover:bg-red-700 font-medium rounded-xl py-2 px-6">
+                        Delete
+                      </button>
+                      <button className="bg-green-500 hover:bg-green-700 font-medium rounded-xl py-2 px-6">
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr className="text-center hover:bg-gray-100 ">
-                  <td colSpan={8} className="border border-indigo-900 text-red-600 px-4 py-12 text-2xl">
+                  <td
+                    colSpan={8}
+                    className="border border-indigo-900 text-red-600 px-4 py-12 text-2xl"
+                  >
                     No Books Found Related For This Academic Year
                   </td>
                 </tr>
