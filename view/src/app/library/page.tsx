@@ -17,6 +17,7 @@ export default function Library() {
   };
 
   const [courseBooks, setCourseBooks] = useState<Book[]>([]);
+  const [selectedYear, setSelectedYear] = useState<string>("year");
 
   useEffect(() => {
     const fetchCourseBooks = async () => {
@@ -35,6 +36,14 @@ export default function Library() {
 
     fetchCourseBooks();
   }, []);
+
+  const filterBooks = courseBooks.filter((book) => {
+    if (selectedYear === "year") return true;
+    return book.academic_year === selectedYear;
+  });
+
+  const displayedBooks = selectedYear === "year" ? courseBooks : filterBooks;
+  
   return (
     <div className="flex">
       <div className="w-[25%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
@@ -57,6 +66,20 @@ export default function Library() {
         <div>
           <div className="flex items-center justify-between pb-6">
             <p className="text-xl text-indigo-900">All Books</p>
+            <select
+              name="year"
+              id="year"
+              className="outline-none border-2 border-indigo-900 rounded-lg px-4 py-2"
+              onChange={(e) => setSelectedYear(e.target.value)}
+            >
+              <option value="year">Select Year</option>
+              <option value="s1">S1</option>
+              <option value="s2">S2</option>
+              <option value="s3">S3</option>
+              <option value="s4">S4</option>
+              <option value="s5">S5</option>
+              <option value="s6">S6</option>
+            </select>
             <FaPlus
               size={25}
               title="Add Book"
@@ -93,7 +116,9 @@ export default function Library() {
               </tr>
             </thead>
             <tbody>
-              {courseBooks.map((book, index) => (
+
+              {displayedBooks.length > 0 ? (
+              displayedBooks.map((book, index) => (
                 <tr key={index} className="text-center hover:bg-gray-100 ">
                   <td className="border border-indigo-900 text-gray-600 px-4 py-2 ">
                     {book.book_id}
@@ -125,7 +150,13 @@ export default function Library() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))):(
+                <tr className="text-center hover:bg-gray-100 ">
+                  <td colSpan={8} className="border border-indigo-900 text-red-600 px-4 py-12 text-2xl">
+                    No Books Found Related For This Academic Year
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
