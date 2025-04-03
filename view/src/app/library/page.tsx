@@ -39,6 +39,16 @@ export default function Library() {
     fetchCourseBooks();
   }, []);
 
+  const refreshBooks = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/course-books/all-books");
+      const data = await response.json();
+      if (data.Books) setCourseBooks(data.Books);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
+
   const filterBooks = courseBooks.filter((book) => {
     if (selectedYear === "year") return true;
     return book.academic_year === selectedYear;
@@ -95,6 +105,7 @@ export default function Library() {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             title="Add a New Book"
+            onBookAdded={refreshBooks}
           />
           <table className="min-w-full bg-white border border-gray-300">
             <thead>

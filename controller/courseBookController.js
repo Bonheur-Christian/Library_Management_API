@@ -7,6 +7,9 @@ module.exports = {
         const { bookname, subject, academic_year, isbn, published_year, quantity } = req.body
 
         try {
+            if (!bookname || !subject || !academic_year || !isbn || !published_year || !quantity)
+                return res.status(400).json({ messageError: "Please fill all the fields." })
+
             const bookSaved = await CourseBooksModel.saveNewBook(bookname, subject, academic_year, isbn, published_year, quantity);
 
             if (bookSaved.error)
@@ -15,7 +18,7 @@ module.exports = {
             return res.status(201).json({ message: "Book successfully added.", book: bookSaved });
 
         } catch (err) {
-            return res.status(500).json({ messageError: "Error in saving course book" })
+            return res.status(500).json({ messageError: "Error in saving course book", error: err })
         }
     },
 
