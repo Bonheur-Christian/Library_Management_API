@@ -58,7 +58,7 @@ export default function Library() {
 
   return (
     <div className="flex">
-      <div className="w-[25%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
+      <div className="w-[15%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
         <SideBar logoUrl="/svg/library.svg" />
       </div>
 

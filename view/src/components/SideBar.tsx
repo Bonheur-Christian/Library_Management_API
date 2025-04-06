@@ -8,11 +8,11 @@ import { IoMagnetOutline } from "react-icons/io5";
 import { SiStudyverse } from "react-icons/si";
 import Image from "next/image";
 
-interface LibraryProps{
-    logoUrl:string
+interface LibraryProps {
+  logoUrl: string;
 }
 
-export default function SideBar({logoUrl}:LibraryProps) {
+export default function SideBar({ logoUrl }: LibraryProps) {
   const ordinaryLevel = [
     { icon: <BiMath />, link: "Mathematics" },
     { icon: <IoMagnetOutline />, link: "Physics" },
@@ -36,30 +36,41 @@ export default function SideBar({logoUrl}:LibraryProps) {
     { icon: <SiStudyverse />, link: "GSCS" },
   ];
 
-
+  const sideBarLinks = [
+    { linkName: "All Books", destination: "/library/" },
+    { linkName: "Course Books", destination: "library/course-books" },
+    { linkName: "Novels", destination: "library/novels" },
+    { linkName: "Lended Books", destination: "library/lended" },
+    { linkName: "Returned Books", destination: "library/returned" },
+    { linkName: "Lost Books", destination: "library/lost" },
+  ];
 
   return (
     <div className="space-y-6">
       <div className="w-full bg-indigo-900 sticky top-0 z-50 py-6">
         <Image src={logoUrl} height={200} width={200} alt="Library" />
       </div>
-
+      <div className="space-y-6">
+        {sideBarLinks.map((link, index) => (
+          <Link
+            key={index}
+            href={link.destination}
+            className="font-semibold text-white block px-4"
+          >
+            {link.linkName}
+          </Link>
+        ))}
+      </div>
       <LibraryAccordion
         title="Ordinary Level "
         items={ordinaryLevel}
-        initiallyOpen={true}
+        initiallyOpen={false}
       />
       <LibraryAccordion
         title="Advanced Level "
         items={advancedLevel}
         initiallyOpen={false}
       />
-      <Link href="/library/lent" className="font-semibold text-white block px-4">
-        Books Lent
-      </Link>
-      <Link href="/library/returned" className="font-semibold text-white px-4">
-        Book Returned
-      </Link>
     </div>
   );
 }
