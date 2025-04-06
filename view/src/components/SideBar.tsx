@@ -7,6 +7,7 @@ import { GiAtom, GiTakeMyMoney } from "react-icons/gi";
 import { IoMagnetOutline } from "react-icons/io5";
 import { SiStudyverse } from "react-icons/si";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 interface LibraryProps {
   logoUrl: string;
@@ -37,7 +38,7 @@ export default function SideBar({ logoUrl }: LibraryProps) {
   ];
 
   const sideBarLinks = [
-    { linkName: "All Books", destination: "/library/" },
+    { linkName: "All Books", destination: "/library" },
     { linkName: "Course Books", destination: "library/course-books" },
     { linkName: "Novels", destination: "library/novels" },
     { linkName: "Lended Books", destination: "library/lended" },
@@ -45,8 +46,16 @@ export default function SideBar({ logoUrl }: LibraryProps) {
     { linkName: "Lost Books", destination: "library/lost" },
   ];
 
+  const path =usePathname();
+  console.log(path);
+  
+
+  const isActive =(pathname:string)=>{
+    return pathname === path;
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 fixed w-[13%]">
       <div className="w-full bg-indigo-900 sticky top-0 z-50 py-6">
         <Image src={logoUrl} height={200} width={200} alt="Library" />
       </div>
@@ -55,7 +64,7 @@ export default function SideBar({ logoUrl }: LibraryProps) {
           <Link
             key={index}
             href={link.destination}
-            className="font-semibold text-white block px-4"
+            className={`font-semibold ${link.destination && isActive(link.destination) ? "bg-white text-indigo-900 py-3 rounded-lg":"hover:bg-white hover:text-indigo-900 text-white py-3 rounded-lg duration-500"}  block px-4`}
           >
             {link.linkName}
           </Link>

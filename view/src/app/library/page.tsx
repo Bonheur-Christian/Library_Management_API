@@ -1,10 +1,10 @@
 "use client";
 
 import { FaPlus } from "react-icons/fa6";
-import { IoMdNotificationsOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import SideBar from "@/components/SideBar";
 import Modal from "@/components/Modal";
+import TopBar from "@/components/TopBar";
 
 export default function Library() {
   type Book = {
@@ -41,7 +41,9 @@ export default function Library() {
 
   const refreshBooks = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/course-books/all-books");
+      const response = await fetch(
+        "http://localhost:3001/api/course-books/all-books"
+      );
       const data = await response.json();
       if (data.Books) setCourseBooks(data.Books);
     } catch (error) {
@@ -63,18 +65,7 @@ export default function Library() {
       </div>
 
       <div className="w-[80%] py-6 px-12 space-y-10">
-        <div className="flex items-center justify-between w-full sticky top-0 bg-white pb-10 pt-4">
-          <input
-            type="search"
-            placeholder="Search..."
-            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <IoMdNotificationsOutline
-            size={30}
-            className="text-gray-400 cursor-pointer"
-            title="Notifications"
-          />
-        </div>
+        <TopBar />
         <div>
           <div className="flex items-center justify-between pb-6">
             <p className="text-xl text-indigo-900">All Books</p>
@@ -110,28 +101,28 @@ export default function Library() {
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Book Id
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Book Name
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Subject
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Academic Year
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   ISBN
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Published Year
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Quantity(copies)
                 </th>
-                <th className="border-2 border-indigo-900 text-gray-600 px-4 py-2">
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Action
                 </th>
               </tr>
