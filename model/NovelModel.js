@@ -96,7 +96,7 @@ const NovelModel = {
 
     },
 
-    //functions to handle Book 
+    //functions to handle Book Lending
 
     findBookToLend: async (title, author) => {
         const findBookQuery = "SELECT * FROM novels WHERE bookName =? AND book_author =? ";
@@ -115,4 +115,4 @@ const NovelModel = {
 
 }
 
-module.exports = NovelModel;Lending
+module.exports = NovelModel;
