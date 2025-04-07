@@ -30,7 +30,7 @@ module.exports = {
                 return res.status(200).json({ Books: books });
             }
 
-            return res.status(404).json({ messageError: "No Books Found" })
+            return res.status(204).json({ messageError: "No Books Found" })
 
         } catch (err) {
             return res.status(500).json({ message: "Error occured in getting all books." })

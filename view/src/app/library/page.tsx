@@ -29,10 +29,19 @@ export default function Library() {
         const res = await fetch(
           "http://localhost:3001/api/course-books/all-books"
         );
+
+        if (res.status === 204) {
+          console.log("No Books Found");
+          setCourseBooks([]);
+          return;
+        }
+
         const data = await res.json();
 
-        if (data.Books) setCourseBooks(data.Books);
-        else console.log("No Books Found");
+        data.Books
+          ? setCourseBooks(data.Books)
+          : setCourseBooks(data.Books || []);
+
       } catch (err) {
         console.log("Error in fetching data", err);
       }

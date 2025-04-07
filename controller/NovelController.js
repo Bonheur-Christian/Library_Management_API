@@ -5,7 +5,13 @@ module.exports = {
         const { title, author, isbn, price, published_year, quantity } = req.body;
 
         try {
+
+            if (!title || !author || !isbn || !price || !published_year || !quantity) 
+                return res.status(400).json({ messageError: "Please fill all the fields." })
+
             const book = await NovelModel.insertBookInStock(title, author, isbn, price, published_year, quantity);
+
+        
 
             if (book.error) {
                 return res.status(400).json({ messageError: book.error })
@@ -14,7 +20,6 @@ module.exports = {
             return res.status(201).json({ message: "Book successfully added.", book: book });
 
         } catch (err) {
-            console.log(err);
             return res.status(500).json({ error: err.message });
         }
 
@@ -26,10 +31,10 @@ module.exports = {
             const books = await NovelModel.getAllBooksInStock();
 
             if (books.length > 0) {
-                return res.status(200).json({ message: "Books retrieved: ", Books: books });
+                return res.status(200).json({ Books: books });
             }
 
-            return res.status(404).json({ messageError: "No Books Found" })
+            return res.status(204).json({ messageError: "No Books Found" })
 
         } catch (err) {
             return res.status(500).json({ message: "Error occured in getting all books." })
