@@ -32,7 +32,6 @@ const NovelModel = {
             return results;
 
         } catch (err) {
-            console.log(err);
 
             throw err;
         }

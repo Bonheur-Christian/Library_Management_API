@@ -3,8 +3,8 @@
 import { FaPlus } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import SideBar from "@/components/SideBar";
-import Modal from "@/components/Modal";
 import TopBar from "@/components/TopBar";
+import AddCourseBookModal from "@/components/AddCourseBookModal";
 
 export default function Library() {
   type Book = {
@@ -20,6 +20,8 @@ export default function Library() {
   const [courseBooks, setCourseBooks] = useState<Book[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>("year");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchCourseBooks = async () => {
@@ -30,7 +32,7 @@ export default function Library() {
         const data = await res.json();
 
         if (data.Books) setCourseBooks(data.Books);
-        console.log("No Books Found");
+        else console.log("No Books Found");
       } catch (err) {
         console.log("Error in fetching data", err);
       }
@@ -58,13 +60,43 @@ export default function Library() {
 
   const displayedBooks = selectedYear === "year" ? courseBooks : filterBooks;
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBooks = displayedBooks.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(displayedBooks.length / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  //Delete Book
+  const handleDelete = async (bookId: number) => {
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/course-books/delete-course-book/${bookId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (res.ok) {
+        console.log("Book deleted successfully:");
+        refreshBooks();
+
+        return;
+      }
+
+      console.log("failed to delete Book");
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
+
   return (
     <div className="flex">
-      <div className="w-[15%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
-        <SideBar logoUrl="/svg/library.svg" />
-      </div>
+      <SideBar logoUrl="/svg/library.svg" />
 
-      <div className="w-[80%] py-6 px-12 space-y-10">
+      <div className="w-[80%] py-6 px-12 space-y-4">
         <TopBar />
         <div>
           <div className="flex items-center justify-between pb-6">
@@ -73,7 +105,10 @@ export default function Library() {
               name="year"
               id="year"
               className="outline-none border-2 border-indigo-900 rounded-lg px-6 py-2 cursor-pointer"
-              onChange={(e) => setSelectedYear(e.target.value)}
+              onChange={(e) => {
+                setSelectedYear(e.target.value);
+                setCurrentPage(1);
+              }}
             >
               <option value="year">Select Year</option>
               <option value="s1">S1</option>
@@ -92,12 +127,14 @@ export default function Library() {
               }}
             />
           </div>
-          <Modal
+
+          <AddCourseBookModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             title="Add a New Book"
             onBookAdded={refreshBooks}
           />
+
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
@@ -128,10 +165,10 @@ export default function Library() {
               </tr>
             </thead>
             <tbody>
-              {displayedBooks.length > 0 ? (
-                displayedBooks.map((book, index) => (
-                  <tr key={index} className="text-center hover:bg-gray-100 ">
-                    <td className="border border-indigo-900 text-gray-600 px-4 py-2 ">
+              {currentBooks.length > 0 ? (
+                currentBooks.map((book, index) => (
+                  <tr key={index} className="text-center hover:bg-gray-100">
+                    <td className="border border-indigo-900 text-gray-600 px-4 py-2">
                       {book.book_id}
                     </td>
                     <td className="border border-indigo-900 text-gray-600 px-4 py-2">
@@ -153,7 +190,10 @@ export default function Library() {
                       {book.quantity}
                     </td>
                     <td className="border border-indigo-900 px-4 py-2 space-x-4 text-white">
-                      <button className="bg-red-500 hover:bg-red-700 font-medium rounded-xl py-2 px-6">
+                      <button
+                        className="bg-red-500 hover:bg-red-700 font-medium rounded-xl py-2 px-6"
+                        onClick={() => handleDelete(book.book_id)}
+                      >
                         Delete
                       </button>
                       <button className="bg-green-500 hover:bg-green-700 font-medium rounded-xl py-2 px-6">
@@ -163,17 +203,51 @@ export default function Library() {
                   </tr>
                 ))
               ) : (
-                <tr className="text-center hover:bg-gray-100 ">
+                <tr className="text-center hover:bg-gray-100">
                   <td
                     colSpan={8}
                     className="border border-indigo-900 text-red-600 px-4 py-12 text-2xl"
                   >
-                    No Books Found Related For This Academic Year
+                    No Books Found
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-6 space-x-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-4 py-2 border border-indigo-900 hover:bg-indigo-900 hover:text-white duration-500 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-4 py-2 border rounded ${
+                    currentPage === i + 1
+                      ? "bg-indigo-900 text-white"
+                      : "bg-white text-indigo-900 border-indigo-900 hover:bg-indigo-900 hover:text-white duration-500"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-4 py-2 border rounded disabled:opacity-50 disabled:cursor-not-allowed border-indigo-900 hover:bg-indigo-900 hover:text-white duration-500"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,42 +1,37 @@
-"use client"
+"use client";
 
 import SideBar from "@/components/SideBar";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { IoMdNotificationsOutline } from "react-icons/io";
 
+export default function ReturnedBooks() {
+  type Book = {
+    book_id: number;
+    bookname: string;
+    subject: string;
+    academic_year: string;
+    isbn: string;
+    published_year: number;
+    quantity: number;
+  };
 
-export default function LentedBook() {
-    type Book = {
-        book_id: number;
-        bookname: string;
-        subject: string;
-        academic_year: string;
-        isbn: string;
-        published_year: number;
-        quantity: number;
-      };
+  const [lentedBooks, setLentedBooks] = useState<Book[]>([]);
 
-    const [lentedBooks, setLentedBooks] =useState<Book[]>([]);
-
-    useEffect(()=>{
-
-        const fetchLentedBooks = async()=>{
-            try{
-                const res =await fetch("http://localhost:3001/api/course-books/all-books")
-
-            }catch(err){
-                console.log("Error in fetching Lented Books", err);
-                
-            }
-        }
-
-    }, [])
+  useEffect(() => {
+    const fetchLentedBooks = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3001/api/course-books/all-books"
+        );
+      } catch (err) {
+        console.log("Error in fetching Lented Books", err);
+      }
+    };
+  }, []);
   return (
     <div className="flex">
-      <div className="w-[25%] bg-indigo-900 min-h-screen px-6 py-10 space-y-12">
-        <SideBar logoUrl="../svg/library.svg" />
-      </div>
+      <SideBar logoUrl="../svg/library.svg" />
       <div className="w-[80%] py-6 px-12 space-y-10">
         <div className="flex items-center justify-between w-full sticky top-0 bg-white pb-10 pt-4">
           <input

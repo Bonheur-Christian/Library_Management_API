@@ -10,7 +10,7 @@ interface ModalProps {
 
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBookAdded }) => {
+const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBookAdded }) => {
   if (!isOpen) return null;
 
   interface FormData {
@@ -179,4 +179,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBookAdded }) =>
   );
 };
 
-export default Modal;
+export default AddCourseBookModal;
