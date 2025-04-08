@@ -97,5 +97,68 @@ module.exports = {
         } catch (err) {
             return res.status(500).json({ messageError: "Error in deleting course book" })
         }
+    }, 
+    
+    lendBook: async (req, res) => {
+        const { borrower_name, title, author } = req.body;
+
+        try {
+            if (!borrower_name || !title || !author)
+                return res.status(404).json({ messageError: "Missing Required Fields" });
+
+            const desiredBook = await NovelModel.findBookToLend(title, author);
+
+            if (desiredBook.length === 0)
+                return res.status(404).json({ messageError: "Desired book(s) Not Found." });
+
+            const bookToLend = desiredBook[0];
+            const availableQuantity = bookToLend.quantity;
+
+            if (availableQuantity <= 0)
+                return res.status(404).json({ messageError: "No Copies left to lend" });
+
+            const updatedQuantity = availableQuantity - 1;
+
+            await NovelModel.updateBookInStock(
+                bookToLend.bookName,
+                bookToLend.book_author,
+                bookToLend.bookISBN,
+                bookToLend.price,
+                bookToLend.published_year,
+                updatedQuantity,
+                bookToLend.bookID
+            );
+
+            const date = new Date();
+
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+
+            const lend_date = `${year}-${month}-${day}`;
+
+            const lendedBook = await NovelModel.insertBookInLendedBooks(bookToLend.bookID, borrower_name, lend_date);
+
+            if (lendedBook.affectedRows > 0)
+                return res.status(200).json(
+                    {
+                        message: "Book Lent Successfully",
+                        book: {
+                            title: bookToLend.bookName,
+                            author: bookToLend.book_author,
+                            borrower: borrower_name,
+                            lend_date: lend_date
+                        }
+
+                    }
+                )
+
+        } catch (err) {
+            return res.status(500).json({ messageError: "Error in lending  Book" });
+        }
+
     }
+
+
+
 }
