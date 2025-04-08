@@ -104,6 +104,7 @@ const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBo
               </label>
               <input
                 value={formData.bookname}
+                placeholder="Enter bookname"
                 onChange={handleChange}
                 name="bookname"
                 type="text"
@@ -116,6 +117,7 @@ const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBo
               <input
                 value={formData.subject}
                 onChange={handleChange}
+                placeholder="Enter book subject"
                 name="subject"
                 type="text"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -127,6 +129,7 @@ const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBo
               <input
                 value={formData.academic_year}
                 onChange={handleChange}
+                placeholder="Enter academic year"
                 name="academic_year"
                 type="text"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -137,6 +140,7 @@ const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBo
                 name="isbn"
                 onChange={handleChange}
                 value={formData.isbn}
+                placeholder="Enter book isbn"
                 type="text"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -146,9 +150,9 @@ const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBo
               </label>
               <input
                 name="published_year"
-                value={formData.published_year}
                 onChange={handleChange}
-                type="number"
+                placeholder="Enter Published year"
+                type="text"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
@@ -157,9 +161,9 @@ const AddCourseBookModal: React.FC<ModalProps> = ({ isOpen, onClose, title, onBo
               </label>
               <input
                 name="quantity"
-                value={formData.quantity}
+                placeholder="Enter quantity"
                 onChange={handleChange}
-                type="number"
+                type="text"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
