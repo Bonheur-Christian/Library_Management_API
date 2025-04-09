@@ -23,6 +23,23 @@ const CourseBooksModel = {
         }
     },
 
+    lendCourseBook: async (book_id, borrower_name, academic_year, lend_date) => {
+
+        const insertQuery = "INSERT INTO lended_book(book_id, borrower_name, lend_date) VALUES(?, ?, ?)";
+
+        try {
+            const [results] = connection.execute(insertQuery, [book_id, borrower_name, academic_year, lend_date]);
+
+            return results;
+
+        } catch (err) {
+            console.log(err);
+            throw new err;
+
+        }
+
+    },
+
     getCourseBookById: async (id) => {
         const getQuery = "SELECT * FROM course_books WHERE book_id = ?";
 
@@ -79,7 +96,9 @@ const CourseBooksModel = {
             throw err;
 
         }
-    }
+    },
+
+
 
 }
 

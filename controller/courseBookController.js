@@ -97,16 +97,16 @@ module.exports = {
         } catch (err) {
             return res.status(500).json({ messageError: "Error in deleting course book" })
         }
-    }, 
-    
+    },
+
     lendBook: async (req, res) => {
-        const { borrower_name, title, author } = req.body;
+        const { id, borrower_name, academic_year, lend_date } = req.body;
 
         try {
-            if (!borrower_name || !title || !author)
+            if (!id || !borrower_name || !academic_year || !lend_date)
                 return res.status(404).json({ messageError: "Missing Required Fields" });
 
-            const desiredBook = await NovelModel.findBookToLend(title, author);
+            const desiredBook = await CourseBooksModel.getCourseBookById(id);
 
             if (desiredBook.length === 0)
                 return res.status(404).json({ messageError: "Desired book(s) Not Found." });
@@ -119,11 +119,11 @@ module.exports = {
 
             const updatedQuantity = availableQuantity - 1;
 
-            await NovelModel.updateBookInStock(
-                bookToLend.bookName,
-                bookToLend.book_author,
-                bookToLend.bookISBN,
-                bookToLend.price,
+            await CourseBooksModel.updateCourseBook(
+                bookToLend.bookname, 
+                bookToLend.subject,
+                bookToLend.academic_year,
+                bookToLend.isbn,
                 bookToLend.published_year,
                 updatedQuantity,
                 bookToLend.bookID
@@ -137,7 +137,7 @@ module.exports = {
 
             const lend_date = `${year}-${month}-${day}`;
 
-            const lendedBook = await NovelModel.insertBookInLendedBooks(bookToLend.bookID, borrower_name, lend_date);
+            const lendedBook = await CourseBooksModel.lendCourseBook(bookToLend.bookID, borrower_name,academic_year,  lend_date);
 
             if (lendedBook.affectedRows > 0)
                 return res.status(200).json(
