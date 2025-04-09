@@ -100,18 +100,21 @@ module.exports = {
     },
 
     lendBook: async (req, res) => {
-        const { id, borrower_name, academic_year, lend_date } = req.body;
+        const { book_id, borrower_name, academic_year } = req.body;
 
         try {
-            if (!id || !borrower_name || !academic_year || !lend_date)
+            if (!book_id || !borrower_name || !academic_year)
                 return res.status(404).json({ messageError: "Missing Required Fields" });
 
-            const desiredBook = await CourseBooksModel.getCourseBookById(id);
-
+            
+            const desiredBook = await CourseBooksModel.getCourseBookById(book_id);            
+            
             if (desiredBook.length === 0)
                 return res.status(404).json({ messageError: "Desired book(s) Not Found." });
 
             const bookToLend = desiredBook[0];
+            console.log(bookToLend);
+            
             const availableQuantity = bookToLend.quantity;
 
             if (availableQuantity <= 0)
@@ -120,13 +123,13 @@ module.exports = {
             const updatedQuantity = availableQuantity - 1;
 
             await CourseBooksModel.updateCourseBook(
-                bookToLend.bookname, 
+                bookToLend.bookname,
                 bookToLend.subject,
                 bookToLend.academic_year,
                 bookToLend.isbn,
                 bookToLend.published_year,
                 updatedQuantity,
-                bookToLend.bookID
+                bookToLend.book_id
             );
 
             const date = new Date();
@@ -137,14 +140,14 @@ module.exports = {
 
             const lend_date = `${year}-${month}-${day}`;
 
-            const lendedBook = await CourseBooksModel.lendCourseBook(bookToLend.bookID, borrower_name,academic_year,  lend_date);
+            const lendedBook = await CourseBooksModel.lendCourseBook(bookToLend.book_id, borrower_name, academic_year, lend_date);
 
             if (lendedBook.affectedRows > 0)
                 return res.status(200).json(
                     {
                         message: "Book Lent Successfully",
                         book: {
-                            title: bookToLend.bookName,
+                            book_id: bookToLend.book_id,
                             author: bookToLend.book_author,
                             borrower: borrower_name,
                             lend_date: lend_date
@@ -153,8 +156,9 @@ module.exports = {
                     }
                 )
 
+            
         } catch (err) {
-            return res.status(500).json({ messageError: "Error in lending  Book" });
+            return res.status(500).json({ messageError: "Error in lending  Book" ,err:err});
         }
 
     }

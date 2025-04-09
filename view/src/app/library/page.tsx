@@ -1,10 +1,11 @@
 "use client";
 
-import { FaPlus } from "react-icons/fa6";
+import { FaDeleteLeft, FaPlus } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import SideBar from "@/components/SideBar";
 import TopBar from "@/components/TopBar";
 import AddCourseBookModal from "@/components/AddCourseBookModal";
+import LendBookModal from "@/components/LendBookModal";
 
 export default function Library() {
   type Book = {
@@ -20,10 +21,13 @@ export default function Library() {
   const [courseBooks, setCourseBooks] = useState<Book[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>("year");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLendModalOpen, setIsLendModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBook, setSelectedBook] = useState(0);
   const itemsPerPage = 10;
 
   useEffect(() => {
+    //fetch all course Books from database
     const fetchCourseBooks = async () => {
       try {
         const res = await fetch(
@@ -41,7 +45,6 @@ export default function Library() {
         data.Books
           ? setCourseBooks(data.Books)
           : setCourseBooks(data.Books || []);
-
       } catch (err) {
         console.log("Error in fetching data", err);
       }
@@ -50,6 +53,7 @@ export default function Library() {
     fetchCourseBooks();
   }, []);
 
+  //Refresh displayed book
   const refreshBooks = async () => {
     try {
       const response = await fetch(
@@ -144,6 +148,14 @@ export default function Library() {
             onBookAdded={refreshBooks}
           />
 
+          <LendBookModal
+            isOpen={isLendModalOpen}
+            onClose={() => setIsLendModalOpen(false)}
+            title="Lend Book"
+            book_id={selectedBook}
+            onBookLent={refreshBooks}
+          />
+
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
@@ -167,6 +179,10 @@ export default function Library() {
                 </th>
                 <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Quantity(copies)
+                </th>
+
+                <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
+                  Lend Book
                 </th>
                 <th className="border-2 border-indigo-900 text-gray-600 px-2 py-2">
                   Action
@@ -198,15 +214,27 @@ export default function Library() {
                     <td className="border border-indigo-900 text-gray-600 px-4 py-2">
                       {book.quantity}
                     </td>
-                    <td className="border border-indigo-900 px-4 py-2 space-x-4 text-white">
+                    <td className="border border-indigo-900 text-white px-4 py-2">
                       <button
-                        className="bg-red-500 hover:bg-red-700 font-medium rounded-xl py-2 px-6"
+                        onClick={() => {
+                          setSelectedBook(book.book_id);
+                          setIsLendModalOpen(true);
+                        }}
+                        className="bg-green-500 hover:bg-green-700 font-medium rounded-lg py-2 px-6 cursor-pointer"
+                      >
+                        Lend
+                      </button>
+                    </td>
+
+                    <td className="border border-indigo-900 px-4 py-2 space-x-4 text-white">
+                      <button className="bg-green-500 hover:bg-green-700 font-medium rounded-lg py-2 px-6">
+                        Edit
+                      </button>
+                      <button
+                        className="bg-red-700 hover:bg-red-700 font-medium rounded-full p-2"
                         onClick={() => handleDelete(book.book_id)}
                       >
-                        Delete
-                      </button>
-                      <button className="bg-green-500 hover:bg-green-700 font-medium rounded-xl py-2 px-6">
-                        Edit
+                        <FaDeleteLeft />
                       </button>
                     </td>
                   </tr>

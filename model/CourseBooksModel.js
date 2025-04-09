@@ -25,10 +25,14 @@ const CourseBooksModel = {
 
     lendCourseBook: async (book_id, borrower_name, academic_year, lend_date) => {
 
-        const insertQuery = "INSERT INTO lended_book(book_id, borrower_name, lend_date) VALUES(?, ?, ?)";
+        console.log(book_id, borrower_name, academic_year, lend_date);
+
+
+        const insertQuery = "INSERT INTO lended_books(book_id, borrower_name, academic_year, lend_date) VALUES(?, ?, ?, ?)";
 
         try {
-            const [results] = connection.execute(insertQuery, [book_id, borrower_name, academic_year, lend_date]);
+
+            const [results] = await connection.execute(insertQuery, [book_id, borrower_name, academic_year, lend_date]);
 
             return results;
 
